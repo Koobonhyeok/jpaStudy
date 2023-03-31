@@ -23,7 +23,7 @@ public class JpaMain2 {
 
             // 준 영속 상태
             Member member = em.find(Member.class, 150L);
-            member.setName("TEST");
+            member.setUsername("TEST");
             // 이렇게 하면 member에 대한 update를 진행 하지 않는다.
             em.detach(member);
             
