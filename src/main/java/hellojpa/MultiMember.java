@@ -41,5 +41,12 @@ public class MultiMember {
 
     public void setTeam(Team team) {
         this.team = team;
+        team.getMembers().add(this);
     }
 }
+
+// 양방향 매핑 절리
+//  - 단방향 매핑만으로도 이미 연관관계 매핑은 완료
+//  - 양방향 매핑은 반대 방향으로 조회 기능이 추가된 것 뿐
+//  - JPQL에서 역방향으로 탐색할 일이 많음
+//  - 단방향 매핑을 잘 하고 양방향은 필요할 때 추가해도 됨
