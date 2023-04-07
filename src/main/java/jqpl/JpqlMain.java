@@ -61,5 +61,115 @@ public class JpqlMain {
 
         emf.close();
     }
+
+    public static void MemberDTOTEst(){
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManager em = emf.createEntityManager();
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        try {
+
+            Member member = new Member();
+            member.setUsername("username");
+            member.setAge(10);
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            // DTO를 사용할 때에는 select 문 안에 new 생성자를 작성을 해야한다.
+            List<MemberDTO> result =  em.createQuery("select new MemberDTO( m.username, m.age ) from Member m", MemberDTO.class).getResultList();
+
+            MemberDTO memberDTO = result.get(0);
+
+            tx.commit();
+        }catch (Exception e){
+            tx.rollback();
+            e.printStackTrace();
+        }finally {
+            em.close();
+        }
+        emf.close();
+    }
+
+    public static void pageTest(){
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManager em = emf.createEntityManager();
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        try {
+
+            for( int i = 0; i< 100; i++){
+                Member member = new Member();
+                member.setUsername("username"+i);
+                member.setAge(i);
+                em.persist(member);
+            }
+
+            em.flush();
+            em.clear();
+
+            List<Member> result =  em.createQuery("select m from Member m order by m.age desc", Member.class)
+                    .setFirstResult(0)
+                    .setMaxResults(10)
+                    .getResultList();
+
+            for( Member m : result ){
+                System.out.println(m.toString());
+            }
+
+            tx.commit();
+        }catch (Exception e){
+            tx.rollback();
+            e.printStackTrace();
+        }finally {
+            em.close();
+        }
+        emf.close();
+    }
+
+    //  JPA 서브 쿼리 한계
+    //    JPA는 WHERE, HAVING 절에서만 서브 쿼리 사용 가능
+    //    SELECT 절도 가능 ( 하이버네이트에서 지원 )
+    //    FROM 절의 서브 쿼리는 현재 JPQL에서 불가능 ( 조인으로 풀 수 있으면 풀어서 해결 )
+    public static void joinTest(){
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManager em = emf.createEntityManager();
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        try {
+            Team team = new Team();
+            team.setName("team");
+
+            Member member = new Member();
+            member.setUsername("username");
+            member.setAge(10);
+
+            member.setTeam(team);
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            String query = "select m from Member m inner join m.team t";
+            List<Member> result =  em.createQuery(query, Member.class)
+                            .getResultList();
+
+            tx.commit();
+        }catch (Exception e){
+            tx.rollback();
+            e.printStackTrace();
+        }finally {
+            em.close();
+        }
+        emf.close();
+    }
 }
 
