@@ -18,6 +18,7 @@ public class JpqlMain {
 //  query.getSingleResult() : 결과가 정확히 하나, 단일 객체 반환
 //                           결과가 없으면 - NoResultException
 //                           둘 이상이면 - NonUniqueResultException
+    // JPA 스터디
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
         EntityManager em = emf.createEntityManager();

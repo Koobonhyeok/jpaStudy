@@ -18,21 +18,21 @@ public class Team {
         return members;
     }
 
-    public void setMembers(List<MultiMember> members) {
-        this.members = members;
-    }
+//    public void setMembers(List<MultiMember> members) {
+//        this.members = members;
+//    }
 
     @OneToMany(mappedBy = "team")
     private List<MultiMember> members = new ArrayList<>();
     // mappedBy : 객체와 테이블이 관계를 맺는 차이
     
-    public Long getId() {
-        return id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public String getName() {
         return name;
